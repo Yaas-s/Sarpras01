@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Dashboard</h1>
+    <p>Total Items: <span id="totalItems"></span></p>
+    <p>Damaged Items: <span id="damagedItems"></span></p>
+    <p>Good Items: <span id="goodItems"></span></p>
+    <button onclick="window.location.href='/manage_inventory.html'">Manage Inventory</button>
+    <script>
+        async function loadInventory() {
+            const response = await fetch('/get_inventory');
+            const data = await response.json();
+            let totalItems = data.length;
+            let damagedItems = data.filter(item => item.condition === 'Damaged').length;
+            let goodItems = totalItems - damagedItems;
+
+            document.getElementById('totalItems').innerText = totalItems;
+            document.getElementById('damagedItems').innerText = damagedItems;
+            document.getElementById('goodItems').innerText = goodItems;
+        }
+
+        window.onload = loadInventory;
+    </script>
+</body>
+</html>
